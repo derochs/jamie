@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import Auth from '../components/Auth'
 import Dashboard from '../components/Dashboard'
+import { Session } from '@supabase/supabase-js'
 
 export default function Home() {
-  const [session, setSession] = useState(null)
+  const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
     setSession(supabase.auth.session())

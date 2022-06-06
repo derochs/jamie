@@ -11,19 +11,51 @@ export default function Dashboard({ session }) {
 
     useEffect(() => {
         setUserId(supabase.auth.user().id);    
-        loadJournal();
     }, [session]);
 
     async function loadJournal() {
+        console.log('loading...');
         const user = supabase.auth.user();
         let {data, error} = await supabase
             .from('journals')
             .select('bloodsugar');
         if (data.length == 0) {
+            console.log('Creating new journal');
             await supabase.from('journals').insert({owner_id: user.id}, {returning: 'minimal'});
         } else {
+            console.log('Received data');
+            console.log(data);
             setBloodsugar(data[0].bloodsugar);
         }
+    }
+
+    async function createJournal() {
+        console.log('Creating journal...');
+        const user = supabase.auth.user();
+        let {data, error} = await supabase
+        .from('journals')
+        .insert({owner_id: user.id}, {returning: 'minimal'});
+        console.log(data);
+        console.log(error);
+    }
+
+    async function createPermission() {
+        console.log('Creating permission...');
+        const user = supabase.auth.user();
+        let {data, error} = await supabase
+        .from('journal_permissions')
+        .insert({user_id: user.id, journal_id: 2}, {returning: 'minimal'});
+        console.log(data);
+        console.log(error);
+    }
+
+    async function readJournals() {
+        const user = supabase.auth.user();
+        let {data, error} = await supabase
+        .from('journals')
+        .select('*');
+        console.log(data);
+        console.log(error);
     }
 
     async function addBloodsugar(timestamp, bloodsugarValue) {
@@ -34,7 +66,8 @@ export default function Dashboard({ session }) {
         }
         let {data, error} = await supabase
             .rpc('add_bloodsugar', request);
-        loadJournal();
+        console.log(data);
+        console.log(error);
     }
 
     async function logout() {
@@ -45,13 +78,12 @@ export default function Dashboard({ session }) {
         <>
             <h1 className="text-xl">Dashboard</h1>
             <span>userId: {userId}</span><br/>
-            <div>
-
-            </div>
-                <button className="mx-8 my-8 bg-pink-700 hover:bg-pink-800 text-white font-bold py-2 px-4 rounded" onClick={logout}>Logout</button>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => addBloodsugar('2022-06-04T14:29:03.974635+00:00', bloodsugar == null ? 0 : bloodsugar.length )}>Add bloodsugar value</button>            
-            <div>
-                <Table headers={['Timestamps', 'Bloodsugar']} data={bloodsugar}/>
+            <div className="my-4">
+                <button className="mx-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => createJournal()}>Create journal</button>
+                <button className="mx-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => createPermission()}>Create permission</button>
+                <button className="mx-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => readJournals()}>Read journals</button>
+                <button className="mx-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => addBloodsugar('2022-06-04T14:29:03.974635+00:00', bloodsugar == null ? 0 : bloodsugar.length )}>Insert bloodsugar value</button>
+                <button className="mx-1 bg-pink-700 hover:bg-pink-800 text-white font-bold py-2 px-4 rounded" onClick={logout}>Logout</button>
             </div>
         </>
     );

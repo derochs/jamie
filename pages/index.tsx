@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabaseClient'
 import Auth from '../components/Auth'
 import Dashboard from '../components/Dashboard'
 import { Session } from '@supabase/supabase-js'
+import Link from 'next/link'
 
 export default function Home() {
   const [session, setSession] = useState<Session | null>(null)
@@ -15,8 +16,8 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="bg-neutral-900">
-      {!session ? <Auth /> : <Dashboard session={session}/>}
+    <div className="">
+      {!session ? <Link href={{pathname: '/login'}}><a>Login</a></Link> : <Dashboard session={session}/>}
     </div>
   )
 }

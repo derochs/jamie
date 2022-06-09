@@ -19,32 +19,35 @@ export default function Auth() {
     }
 
     return (
-        <div className="row flex flex-center">
-          <div className="col-6 form-widget">
-            <h1 className="header">Supabase + Next.js</h1>
-            <p className="description">Sign in via magic link with your email below</p>
-            <div>
-              <input
-                className="inputField"
-                type="email"
-                placeholder="Your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleLogin(email)
-                }}
-                className="button block"
-                disabled={loading}
-              >
-                <span>{loading ? 'Loading' : 'Send magic link'}</span>
-              </button>
-            </div>
+      <>
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="px-8 py-4 text-left bg-neutral-800 shadow-md text-zinc-200">
+            <h3 className="text-xl font-bold text-center">Login</h3>
+            <form>
+              <div className="mt-4">
+                <label className="block" for="email">
+                  Email
+                </label>
+                <input className="mt-1 w-full text-zinc-200 bg-neutral-800 border border-zinc-200 px-2 py-1 focus:outline-none" id="email" type="text" placeholder="Email"/>
+              </div>
+              <div className="mt-4">
+                <label className="block" for="password">
+                  Password
+                </label>
+                <input className="mt-1 w-full text-zinc-200 bg-neutral-800 border border-zinc-200 px-2 py-1 focus:outline-none" id="password" type="text" placeholder="Password"/>
+                <a className="text-sm mt-1 block content-end text-right text-cyan-500" href="">Forgot password?</a>
+              </div>
+              <div className="mt-4">
+                <button className="block bg-transparent hover:bg-cyan-500 hover:border-cyan-500 w-full border rounded-full py-1">
+                  Login
+                </button>
+              </div>
+              <div>
+
+              </div>
+            </form>
           </div>
         </div>
-      )
+      </>
+  )
 }

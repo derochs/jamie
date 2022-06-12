@@ -44,7 +44,7 @@ export default function Dashboard({ session }) {
         const user = supabase.auth.user();
         let {data, error} = await supabase
         .from('journal_permissions')
-        .insert({user_id: user.id, journal_id: 2}, {returning: 'minimal'});
+        .insert({user_id: user.id, journal_id: 1}, {returning: 'minimal'});
         console.log(data);
         console.log(error);
     }
